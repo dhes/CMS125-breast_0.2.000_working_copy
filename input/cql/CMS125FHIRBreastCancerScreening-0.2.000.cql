@@ -27,7 +27,7 @@ code "Female": 'F' from "AdministrativeGender" display 'Female'
 code "Left (qualifier value)": '7771000' from "SNOMEDCT" display 'Left (qualifier value)'
 code "Right (qualifier value)": '24028007' from "SNOMEDCT" display 'Right (qualifier value)'
 
-parameter "Measurement Period" Interval<DateTime>
+parameter "Measurement Period" Interval<DateTime> default Interval[@2026-01-01T00:00:00.0, @2026-12-31T23:59:59.999]
 
 context Patient
 
