@@ -277,7 +277,7 @@ define function MedicationRequestPeriod(Request "MedicationRequest"):
       dose: Coalesce(end of doseRange, doseQuantity),
       dosesPerDay: Coalesce(ToDaily(frequency, period), Count(timing.repeat.timeOfDay), 1.0),
       boundsPeriod: timing.repeat.bounds as Interval<DateTime>,
-      daysSupply: (convert R.dispenseRequest.expectedSupplyDuration to days).value,
+      daysSupply: (R.dispenseRequest.expectedSupplyDuration).value,
       quantity: R.dispenseRequest.quantity,
       refills: Coalesce(R.dispenseRequest.numberOfRepeatsAllowed, 0),
       startDate:
