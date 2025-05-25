@@ -262,6 +262,18 @@
                 "form": [],
                 "binary": "../input/test-resources-experimental/5d4cb-condition-union/trial-3.json"
             }
+        },
+        {
+            "_id": "cf2ac6f1-4f6a-4a16-bda9-c8869304540d",
+            "colId": "db209519-97e2-4f95-905f-ef15624e0bc7",
+            "containerId": "",
+            "name": "misc",
+            "url": "Observation/a4e8d273-a491-42d6-8179-f0b51457dca7",
+            "method": "GET",
+            "sortNum": 5000,
+            "created": "2025-05-25T18:41:10.336Z",
+            "modified": "2025-05-25T18:41:29.406Z",
+            "headers": []
         }
     ],
     "settings": {

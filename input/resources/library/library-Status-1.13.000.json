@@ -23,6 +23,11 @@
       "code": "imaging",
       "display": "imaging"
     }
+  }, {
+    "url": "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-softwaresystem",
+    "valueReference": {
+      "reference": "Device/cqf-tooling"
+    }
   } ],
   "url": "https://madie.cms.gov/Library/Status",
   "identifier": [ {

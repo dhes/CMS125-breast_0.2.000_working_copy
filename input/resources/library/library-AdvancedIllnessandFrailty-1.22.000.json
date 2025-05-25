@@ -30,6 +30,11 @@
       "code": "98181-1",
       "display": "Medical equipment used"
     }
+  }, {
+    "url": "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-softwaresystem",
+    "valueReference": {
+      "reference": "Device/cqf-tooling"
+    }
   } ],
   "url": "https://madie.cms.gov/Library/AdvancedIllnessandFrailty",
   "identifier": [ {

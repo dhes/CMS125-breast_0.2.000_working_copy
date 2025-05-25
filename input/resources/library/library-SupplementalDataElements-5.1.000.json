@@ -23,6 +23,11 @@
       "code": "248152002",
       "display": "Female (finding)"
     }
+  }, {
+    "url": "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-softwaresystem",
+    "valueReference": {
+      "reference": "Device/cqf-tooling"
+    }
   } ],
   "url": "https://madie.cms.gov/Library/SupplementalDataElements",
   "identifier": [ {

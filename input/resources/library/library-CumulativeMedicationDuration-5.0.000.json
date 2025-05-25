@@ -191,6 +191,11 @@
       "code": "PHS",
       "display": "PHS"
     }
+  }, {
+    "url": "http://hl7.org/fhir/uv/crmi/StructureDefinition/crmi-softwaresystem",
+    "valueReference": {
+      "reference": "Device/cqf-tooling"
+    }
   } ],
   "url": "https://madie.cms.gov/Library/CumulativeMedicationDuration",
   "identifier": [ {
