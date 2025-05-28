@@ -9,7 +9,7 @@ include AdultOutpatientEncounters version '4.15.000' called AdultOutpatientEncou
 include Hospice version '6.15.001' called Hospice
 include Status version '1.13.000' called Status
 include PalliativeCare version '1.15.001' called PalliativeCare
-include AdvancedIllnessandFrailty version '1.22.000' called AIFrailLTCF
+include AdvancedIllnessandFrailty version '1.22.001' called AIFrailLTCF
 
 codesystem "AdministrativeGender": 'http://terminology.hl7.org/CodeSystem/v3-AdministrativeGender'
 codesystem "SNOMEDCT": 'http://snomed.info/sct'
@@ -27,9 +27,13 @@ code "Female": 'F' from "AdministrativeGender" display 'Female'
 code "Left (qualifier value)": '7771000' from "SNOMEDCT" display 'Left (qualifier value)'
 code "Right (qualifier value)": '24028007' from "SNOMEDCT" display 'Right (qualifier value)'
 
-parameter "Measurement Period" Interval<DateTime> default Interval[@2026-01-01T00:00:00.0, @2026-12-31T23:59:59.999]
+parameter "Measurement Period" Interval<DateTime> default Interval[@2026-01-01, @2026-12-31]
 
 context Patient
+
+// define  AMeasurementPeriod: "Measurement Period"
+// define APeriodEnd: end of Interval[@2026-12-31T23:59:59.000+00:00,@2026-12-31T23:59:59.000+00:00]
+// define APeriodEndsOnOrBeforeEndOFMeasurementPeriod: Interval[@2026-12-31T23:59:59.000+00:00,@2026-12-31T23:59:59.000+00:00] ends on or before end of "Measurement Period"
 
 define "Initial Population":
   AgeInYearsAt(date from 
@@ -57,38 +61,40 @@ define "Denominator Exclusions":
     or PalliativeCare."Has Palliative Care in the Measurement Period"
 
 define "Right Mastectomy Diagnosis":
-  ( ( [ConditionEncounterDiagnosis: "Status Post Right Mastectomy"]
-    union [ConditionProblemsHealthConcerns: "Status Post Right Mastectomy"] ) RightMastectomyProcedure
-    union ( ( [ConditionEncounterDiagnosis: "Unilateral Mastectomy, Unspecified Laterality"]
-        union [ConditionProblemsHealthConcerns: "Unilateral Mastectomy, Unspecified Laterality"] ) UnilateralMastectomyDiagnosis
+    ( ( [ConditionEncounterDiagnosis: "Status Post Right Mastectomy"] SE
+      union [ConditionProblemsHealthConcerns: "Status Post Right Mastectomy"] SP ) RightMastectomyProcedure
+  union 
+    ( ( [ConditionEncounterDiagnosis: "Unilateral Mastectomy, Unspecified Laterality"] UE
+      union [ConditionProblemsHealthConcerns: "Unilateral Mastectomy, Unspecified Laterality"] UP ) UnilateralMastectomyDiagnosis
         where exists ( UnilateralMastectomyDiagnosis.bodySite S
             where S ~ "Right (qualifier value)"
         )
     ) ) RightMastectomy
     where RightMastectomy.prevalenceInterval ( ) starts on or before end of "Measurement Period"
 
-define "Right Mastectomy Procedure":
-  ( ( [Procedure: "Unilateral Mastectomy Right"] ).isProcedurePerformed ( ) ) UnilateralMastectomyRightPerformed
-    where UnilateralMastectomyRightPerformed.performed.toInterval ( ) ends on or before end of "Measurement Period"
-
 define "Left Mastectomy Diagnosis":
-  ( ( [ConditionEncounterDiagnosis: "Status Post Left Mastectomy"]
-      union [ConditionProblemsHealthConcerns: "Status Post Left Mastectomy"]
-      union ( [ConditionEncounterDiagnosis: "Unilateral Mastectomy, Unspecified Laterality"]
-        union [ConditionProblemsHealthConcerns: "Unilateral Mastectomy, Unspecified Laterality"] ) UnilateralMastectomyDiagnosis
+    ( ( [ConditionEncounterDiagnosis: "Status Post Left Mastectomy"] SE
+      union [ConditionProblemsHealthConcerns: "Status Post Left Mastectomy"] SP ) LeftMastectomyProcedure
+  union 
+    ( ( [ConditionEncounterDiagnosis: "Unilateral Mastectomy, Unspecified Laterality"] UE
+      union [ConditionProblemsHealthConcerns: "Unilateral Mastectomy, Unspecified Laterality"] UP ) UnilateralMastectomyDiagnosis
         where exists ( UnilateralMastectomyDiagnosis.bodySite S
             where S ~ "Left (qualifier value)"
         )
   ) ) LeftMastectomy
     where LeftMastectomy.prevalenceInterval ( ) starts on or before end of "Measurement Period"
 
+define "Right Mastectomy Procedure":
+  ( ( [Procedure: "Unilateral Mastectomy Right"] ).isProcedurePerformed ( ) ) UnilateralMastectomyRightPerformed
+    where UnilateralMastectomyRightPerformed.performed.toInterval ( ) ends on or before end of "Measurement Period"
+
 define "Left Mastectomy Procedure":
   ( ( [Procedure: "Unilateral Mastectomy Left"] ).isProcedurePerformed ( ) ) UnilateralMastectomyLeftPerformed
     where UnilateralMastectomyLeftPerformed.performed.toInterval ( ) ends on or before end of "Measurement Period"
 
 define "Bilateral Mastectomy Diagnosis":
-  ( ( ( [ConditionEncounterDiagnosis: "History of bilateral mastectomy"] )
-      union ( [ConditionProblemsHealthConcerns: "History of bilateral mastectomy"] ) ) BilateralMastectomyHistory
+  ( ( ( [ConditionEncounterDiagnosis: "History of bilateral mastectomy"] E )
+      union ( [ConditionProblemsHealthConcerns: "History of bilateral mastectomy"] ) P ) BilateralMastectomyHistory
       where BilateralMastectomyHistory.prevalenceInterval ( ) starts on or before end of "Measurement Period"
   )
 

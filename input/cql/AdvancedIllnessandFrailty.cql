@@ -1,4 +1,4 @@
-library AdvancedIllnessandFrailty version '1.22.000'
+library AdvancedIllnessandFrailty version '1.22.001'
 
 using QICore version '6.0.0'
 
@@ -21,7 +21,7 @@ code "Housing status": '71802-3' from "LOINC" display 'Housing status'
 code "Lives in a nursing home (finding)": '160734000' from "SNOMEDCT" display 'Lives in a nursing home (finding)'
 code "Medical equipment used": '98181-1' from "LOINC" display 'Medical equipment used'
 
-parameter "Measurement Period" Interval<DateTime> default Interval[@2026-01-01T00:00:00.0, @2026-12-31T23:59:59.999]
+parameter "Measurement Period" Interval<DateTime> // [@2026-01-01T00:00:00.0, @2026-12-31T23:59:59.999]
 
 context Patient
 
@@ -51,8 +51,8 @@ define "Has Criteria Indicating Frailty":
         where EquipmentUsed.value as Concept in "Frailty Device" 
         and EquipmentUsed.effective.toInterval() ends during day of "Measurement Period"
     )
-    or exists ( (([ConditionProblemsHealthConcerns: "Frailty Diagnosis"])
-    union ([ConditionEncounterDiagnosis: "Frailty Diagnosis"])) FrailtyDiagnosis
+    or exists ( (([ConditionProblemsHealthConcerns: "Frailty Diagnosis"] P )
+    union ([ConditionEncounterDiagnosis: "Frailty Diagnosis"] E )) FrailtyDiagnosis
         where FrailtyDiagnosis.prevalenceInterval() overlaps day of "Measurement Period"
     )
     or exists ( (([Encounter: "Frailty Encounter"]).isEncounterPerformed()) FrailtyEncounter
@@ -63,8 +63,8 @@ define "Has Criteria Indicating Frailty":
     )
 
 define "Has Advanced Illness in Year Before or During Measurement Period":
-exists ((([ConditionProblemsHealthConcerns: "Advanced Illness"])
-union ([ConditionEncounterDiagnosis: "Advanced Illness"])) AdvancedIllnessDiagnosis
+exists ((([ConditionProblemsHealthConcerns: "Advanced Illness"] P )
+union ([ConditionEncounterDiagnosis: "Advanced Illness"] E )) AdvancedIllnessDiagnosis
 where AdvancedIllnessDiagnosis.prevalenceInterval() starts during day of Interval[start of "Measurement Period" - 1 year, end of "Measurement Period"])
 
 define "Has Dementia Medications in Year Before or During Measurement Period":
